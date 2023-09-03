@@ -11,10 +11,10 @@ const router = new Router();
 router
   .get("/api/mirror/:id", async (context) => {
     if (context?.params?.id) {
-      // console.log(context?.request.headers.get("x-forwarded-for"));
+      console.log(context?.request.ip);
       context.response.headers.set("content-type", "application/json");
       context.response.headers.set("cache-control", "max-age=7200");
-      const result = await getVideoUrl(parseInt(context?.params?.id), context?.request.headers.get("x-forwarded-for"));
+      const result = await getVideoUrl(parseInt(context?.params?.id), context?.request.ip);
       context.response.body = JSON.stringify(result);
     }
   })
