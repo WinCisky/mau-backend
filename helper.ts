@@ -1,3 +1,5 @@
+import type PocketBase from "https://esm.sh/pocketbase@0.15.3";
+
 interface HtmlEntities {
     [key: string]: string;
 }
@@ -10,4 +12,11 @@ export function decodeHTMLString(encodedString: string) {
 
     const decodedString = encodedString.replace(/(&quot;|&amp;)/g, match => htmlEntities[match as keyof HtmlEntities]);
     return decodedString;
+}
+
+export function dbAuth(pb: PocketBase) {
+    return pb.admins.authWithPassword(
+        Deno.env.get("ADMIN_EMAIL") ?? "",
+        Deno.env.get("ADMIN_PASSWORD") ?? "",
+    );
 }
