@@ -9,13 +9,18 @@ export async function getVideoUrl(videoId: number | null, address: string | null
     const videoRequest = await fetch(videoUrl);
     const videoData = await videoRequest.text();
     //regex to get metadata
-    const videoMetadata = videoData.match(/window\.videoMetadata\s*=\s*({[\s\S]*?});/);
-    if (videoMetadata) {
-        const videoMetadataJson = JSON.parse(videoMetadata[1]);
-        const tokenDownload = generateToken(2, address, "Yc8U6r8KjAKAepEA");
-        const downloadUrl = "https://au-d1-0" + videoMetadataJson.proxy_download + ".scws-content.net/download/" +
-            videoMetadataJson.storage_download.number + "/" + videoMetadataJson.folder_id + "/" + videoMetadataJson.quality + "p.mp4" + "?token=" + tokenDownload + "&filename=" + videoMetadataJson.name.replace('&', '.');
-        return downloadUrl;
+    // const videoMetadata = videoData.match(/window\.videoMetadata\s*=\s*({[\s\S]*?});/);
+    // if (videoMetadata) {
+    //     const videoMetadataJson = JSON.parse(videoMetadata[1]);
+    //     const tokenDownload = generateToken(2, address, "Yc8U6r8KjAKAepEA");
+    //     const downloadUrl = "https://au-d1-0" + videoMetadataJson.proxy_download + ".scws-content.net/download/" +
+    //         videoMetadataJson.storage_download.number + "/" + videoMetadataJson.folder_id + "/" + videoMetadataJson.quality + "p.mp4" + "?token=" + tokenDownload + "&filename=" + videoMetadataJson.name.replace('&', '.');
+    //     return downloadUrl;
+    // }
+    const regex = /window\.downloadUrl = '([^']+)'/;
+    const result = regex.exec(videoData);
+    if (result) {
+        return result[1];
     }
     return null;
 }
