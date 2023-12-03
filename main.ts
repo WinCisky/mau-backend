@@ -5,6 +5,8 @@ import { dbAuth } from "./helper.ts";
 import { getVideoUrl } from "./helper_mirror.ts";
 import { updateLatest } from "./update_latest.ts";
 import { updateHistory } from "./update_history.ts";
+import { updateSeasonal } from "./update_seasonal.ts";
+import { fillSeasonal } from "./fill_seasonal.ts";
 import { load } from "https://deno.land/std/dotenv/mod.ts";
 
 const env = await load();
@@ -41,6 +43,16 @@ router
   .get("/api/update-history", async (context) => {
     dbAuth(pb);
     await updateHistory(pb);
+    context.response.body = "Done!";
+  })
+  .get("/api/update-seasonal", async (context) => {
+    dbAuth(pb);
+    await updateSeasonal(pb);
+    context.response.body = "Done!";
+  })
+  .get("/api/fill-seasonal", async (context) => {
+    dbAuth(pb);
+    await fillSeasonal(pb);
     context.response.body = "Done!";
   });
 

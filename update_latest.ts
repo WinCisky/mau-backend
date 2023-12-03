@@ -60,7 +60,7 @@ export async function updateLatest(pb: PocketBase) {
                     console.log(mal.main_picture.large);
                     //console.log(mal);
                     if (mal && mal.main_picture && mal.main_picture.large)
-                        anime["imageurl"] = mal.main_picture.large.replace(/\.[a-z]+$/, '.webp');;
+                        anime["imageurl"] = mal.main_picture.large.replace(/\.[a-z]+$/, '.webp');
                 }
 
                 let an;
