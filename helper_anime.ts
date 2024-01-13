@@ -47,6 +47,7 @@ async function saveAnimePastSeasonsAssociation(pb: PocketBase, related: any) {
     let found = false;
     let association = null;
     const animeIds = [];
+    // console.log(`related: ${related.length}`);
     // for every anime in related check if there is an association with the current anime
     for (let i = 0; i < related.length; i++) {
         const anime = related[i];
@@ -54,11 +55,10 @@ async function saveAnimePastSeasonsAssociation(pb: PocketBase, related: any) {
             const animeId = await pb.collection('mau_anime').getFirstListItem(`mau_id="${anime.id}"`);
             animeIds.push(animeId.id);
 
-            if (!found) {
-                found = true;
-                // check if the association already exists
-                association = await pb.collection('mau_related').getFirstListItem(`seasons.mau_id?="${anime.id}"`);
-            }
+            // check if the association already exists
+            association = await pb.collection('mau_related').getFirstListItem(`seasons.mau_id?="${anime.id}"`);
+
+            found = true;
         } catch (_err) {
             // do nothing
         }
@@ -70,12 +70,14 @@ async function saveAnimePastSeasonsAssociation(pb: PocketBase, related: any) {
             "seasons": animeIds
         }
         await pb.collection('mau_related').create(related);
+        // console.log(`created association: ${animeIds}`);
     } else if (association) {
         // update the association
         const related = {
             "seasons": animeIds
         }
         await pb.collection('mau_related').update(association.id, related);
+        // console.log(`updated association: ${animeIds}`);
     }
 }
 
