@@ -20,6 +20,7 @@ export async function updateLatest(pb: PocketBase) {
             for (let i = 0; i < data.length; i++) {
 
                 const anime = data[i].anime;
+                // console.log(anime);
                 anime["mau_id"] = anime.id;
                 delete anime.id;
                 const episode = {
@@ -38,17 +39,9 @@ export async function updateLatest(pb: PocketBase) {
                     "tg_post": data[i].tg_post
                 }
 
-                if (!anime.mal_id){
-                    // do not update mal_id
-                    delete anime.mal_id;
-                    //if forbidden image do not update it
-                    if (anime.imageurl.includes("forbiddenlol"))
-                        delete anime.imageurl;
-                } else {
-                    const malImage = getAnimeImageMal(anime.mal_id);
-                    if (malImage) {
-                        anime["imageurl"] = malImage;
-                    }
+                const malImage = await getAnimeImageMal(anime.mal_id);
+                if (malImage) {
+                    anime["imageurl"] = malImage;
                 }
 
                 let an;
