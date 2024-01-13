@@ -1,6 +1,7 @@
 import type PocketBase from "https://esm.sh/pocketbase@0.15.3";
 
 import { decodeHTMLString } from "./helper.ts";
+import { getAnimeImageMal } from "./helper_anime.ts";
 const MY_URL = "https://www.animeunity.tv";
 
 export async function updateLatest(pb: PocketBase) {
@@ -44,23 +45,10 @@ export async function updateLatest(pb: PocketBase) {
                     if (anime.imageurl.includes("forbiddenlol"))
                         delete anime.imageurl;
                 } else {
-                    //// unofficial api
-                    //const resp = await fetch(`https://api.jikan.moe/v4/anime/${anime.mal_id}/full`);
-                    //const mal = await resp.json();
-                    //if (mal.data)
-                    //    anime["imageurl"] = mal.data.images.webp["large_image_url"];
-                    
-                    // official api
-                    const resp = await fetch(`https://api.myanimelist.net/v2/anime/${anime.mal_id}?fields=main_picture`, {
-                        headers: {
-                            "X-MAL-CLIENT-ID" : Deno.env.get("MAL_CLIENT_ID") ?? ""
-                        }
-                    });
-                    const mal = await resp.json();
-                    console.log(mal.main_picture.large);
-                    //console.log(mal);
-                    if (mal && mal.main_picture && mal.main_picture.large)
-                        anime["imageurl"] = mal.main_picture.large.replace(/\.[a-z]+$/, '.webp');
+                    const malImage = getAnimeImageMal(anime.mal_id);
+                    if (malImage) {
+                        anime["imageurl"] = malImage;
+                    }
                 }
 
                 let an;

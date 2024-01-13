@@ -4,9 +4,7 @@ import PocketBase from "https://esm.sh/pocketbase@0.15.3";
 import { dbAuth } from "./helper.ts";
 import { getVideoUrl } from "./helper_mirror.ts";
 import { updateLatest } from "./update_latest.ts";
-import { updateHistory } from "./update_history.ts";
-import { updateSeasonal } from "./update_seasonal.ts";
-import { fillSeasonal } from "./fill_seasonal.ts";
+import { pastSeasons } from "./past_seasons.ts";
 import { load } from "https://deno.land/std/dotenv/mod.ts";
 
 const env = await load();
@@ -24,6 +22,7 @@ const pb = new PocketBase("https://dev.opentrust.it/");
 
 const router = new Router();
 router
+  // get video url
   .get("/api/mirror/:id", async (context) => {
     if (context?.params?.id) {
       context.response.headers.set("content-type", "application/json");
@@ -35,25 +34,32 @@ router
       context.response.body = JSON.stringify(result);
     }
   })
+  // get latest episodes
   .get("/api/update-latest", async (context) => {
     dbAuth(pb);
     await updateLatest(pb);
     context.response.body = "Done!";
   })
-  .get("/api/update-history", async (context) => {
+  // get previuos seasons
+  .get("/api/past-seasons", async (context) => {
     dbAuth(pb);
-    await updateHistory(pb);
+    await pastSeasons(pb);
     context.response.body = "Done!";
   })
-  .get("/api/update-seasonal", async (context) => {
+  .get("/api/test", async (context) => {
     dbAuth(pb);
-    await updateSeasonal(pb);
-    context.response.body = "Done!";
+    // const ep = await pb.collection('mau_related').getFirstListItem(`seasons.id?="00gco2typofofdz"`);
+    // insert into mau_related
+    // const related = {
+    //   "seasons": [ "00gco2typofofdz", "h94qxxeuackya7w" ]
+    // }
+    // await pb.collection('mau_related').create(related);
+    
+    context.response.body = JSON.stringify("Done!");
   })
-  .get("/api/fill-seasonal", async (context) => {
-    dbAuth(pb);
-    await fillSeasonal(pb);
-    context.response.body = "Done!";
+  // get missing anime
+  .get("/api/get-random", async (context) => {
+    // TODO
   });
 
 const app = new Application();
