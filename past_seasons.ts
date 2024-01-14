@@ -25,8 +25,7 @@ export async function pastSeasons(pb: PocketBase) {
         if (match && match.length > 1) {
             const anime = {
                 "mau_id": parseInt(match[1]),
-                "slug": match[2],
-                "past_seasons_checked": false
+                "slug": match[2]
             }
             await fillAnime(pb, anime.mau_id, anime.slug);
         }

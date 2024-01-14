@@ -6,6 +6,7 @@ import { getVideoUrl } from "./helper_mirror.ts";
 import { updateLatest } from "./update_latest.ts";
 import { pastSeasons } from "./past_seasons.ts";
 import { load } from "https://deno.land/std/dotenv/mod.ts";
+import { getRandom } from "./get_random.ts";
 
 const env = await load();
 if (env.ADMIN_EMAIL) {
@@ -46,20 +47,11 @@ router
     await pastSeasons(pb);
     context.response.body = "Done!";
   })
-  .get("/api/test", async (context) => {
-    dbAuth(pb);
-    // const ep = await pb.collection('mau_related').getFirstListItem(`seasons.id?="00gco2typofofdz"`);
-    // insert into mau_related
-    // const related = {
-    //   "seasons": [ "00gco2typofofdz", "h94qxxeuackya7w" ]
-    // }
-    // await pb.collection('mau_related').create(related);
-    
-    context.response.body = JSON.stringify("Done!");
-  })
   // get missing anime
   .get("/api/get-random", async (context) => {
-    // TODO
+    dbAuth(pb);
+    await getRandom(pb);
+    context.response.body = "Done!";
   });
 
 const app = new Application();
