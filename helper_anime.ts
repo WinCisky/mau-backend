@@ -38,7 +38,9 @@ export async function fillAnime(pb: PocketBase, mal_id: number, slug: string) {
         const parsedEpisodesData = JSON.parse(decodeHTMLString(match[2]));
 
         const savedAnime = await saveAnime(pb, parsedAnimeData);
-        await saveAnimePastSeasonsAssociation(pb, parsedAnimeData.related);
+        if (parsedAnimeData.related && parsedAnimeData.related.length > 0) {
+            await saveAnimePastSeasonsAssociation(pb, parsedAnimeData.related);
+        }
         await saveEpisodes(pb, savedAnime, parsedEpisodesData);
     }
 }
@@ -64,19 +66,16 @@ async function saveAnimePastSeasonsAssociation(pb: PocketBase, related: any) {
         }
     }
 
+    // create the association
+    const relatedSeasons = {
+        "seasons": animeIds
+    }
+
     if (!found) {
-        // create the association
-        const related = {
-            "seasons": animeIds
-        }
-        await pb.collection('mau_related').create(related);
+        await pb.collection('mau_related').create(relatedSeasons);
         // console.log(`created association: ${animeIds}`);
     } else if (association) {
-        // update the association
-        const related = {
-            "seasons": animeIds
-        }
-        await pb.collection('mau_related').update(association.id, related);
+        await pb.collection('mau_related').update(association.id, relatedSeasons);
         // console.log(`updated association: ${animeIds}`);
     }
 }
