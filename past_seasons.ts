@@ -36,8 +36,7 @@ export async function pastSeasons(pb: PocketBase) {
         "past_seasons_checked": true
     }
     try {
-        const an = await pb.collection('mau_anime').getFirstListItem(`mau_id="${animeMauId}"`);
-        await pb.collection('mau_anime').update(an.id, animeData);
+        await pb.collection('mau_anime').update(anime.id, animeData);
         console.log(`updated past_seasons_checked: ${animeMauId}-${animeSlug}`);
     } catch (_err){
         console.log(`error updating past_seasons_checked: ${animeMauId}-${animeSlug}`);
