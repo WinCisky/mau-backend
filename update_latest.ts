@@ -54,7 +54,7 @@ export async function updateLatest(pb: PocketBase) {
 
                 try {
                   // get first element with same anime_id and number
-                  const ep = await pb.collection('mau_episodes').getFirstListItem(`anime_id="${episode.anime_id}" && number="${episode.number}"`);
+                  const ep = await pb.collection('mau_episodes').getFirstListItem(`anime.mau_id="${episode.anime_id}" && number="${episode.number}"`);
                   // const ep = await pb.collection('mau_episodes').getFirstListItem(`mau_id="${episode.mau_id}"`);
                   await pb.collection('mau_episodes').update(ep.id, episode);
                 } catch (_err){
