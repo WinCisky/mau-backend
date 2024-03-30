@@ -1,7 +1,7 @@
 import type PocketBase from "https://esm.sh/pocketbase@0.15.3";
 
 import { decodeHTMLString } from "./helper.ts";
-import { getAnimeImageMal } from "./helper_anime.ts";
+import { getAnimeDetailsMalApi, getAnimeDetailsMalJikanMoeApi } from "./helper_anime.ts";
 const MY_URL = "https://www.animeunity.tv";
 
 export async function updateLatest(pb: PocketBase) {
@@ -39,9 +39,24 @@ export async function updateLatest(pb: PocketBase) {
                     "tg_post": data[i].tg_post
                 }
 
-                const malImage = await getAnimeImageMal(anime.mal_id);
-                if (malImage) {
-                    anime["imageurl"] = malImage;
+                const malApiDetails = await getAnimeDetailsMalApi(anime.mal_id, ["main_picture", "nsfw", "rating"]);
+                if (malApiDetails) {
+                  if (malApiDetails.main_picture && malApiDetails.main_picture.large) {
+                    anime["imageurl"] = malApiDetails.main_picture.large.replace(/\.[a-z]+$/, '.webp');
+                  }
+                  if (malApiDetails.nsfw) {
+                    anime["nsfw"] = malApiDetails.nsfw;
+                  }
+                  if (malApiDetails.rating) {
+                    anime["rating"] = malApiDetails.rating;
+                  }
+                }
+
+                const malJikanMoeApiDetails = await getAnimeDetailsMalJikanMoeApi(anime.mal_id);
+                await new Promise(resolve => setTimeout(resolve, 1000)); // wait 1s
+                if (malJikanMoeApiDetails) {
+                  const video_id = malJikanMoeApiDetails.data?.trailer?.youtube_id ?? "-";
+                  anime["video"] = video_id;
                 }
 
                 let an;

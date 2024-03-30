@@ -1,26 +1,19 @@
 import type PocketBase from "https://esm.sh/pocketbase@0.15.3";
 import { decodeHTMLString } from "./helper.ts";
 
-export async function getAnimeImageMal(mal_id: number) {
-    //// unofficial api
-    //const resp = await fetch(`https://api.jikan.moe/v4/anime/${anime.mal_id}/full`);
-    //const mal = await resp.json();
-    //if (mal.data)
-    //    anime["imageurl"] = mal.data.images.webp["large_image_url"];
-
-    // official api
-    const resp = await fetch(`https://api.myanimelist.net/v2/anime/${mal_id}?fields=main_picture`, {
+export async function getAnimeDetailsMalApi(mal_id: number, fields: string[] = []) {
+    const resp = await fetch(`https://api.myanimelist.net/v2/anime/${mal_id}?fields=${fields.join(',')}`, {
         headers: {
             "X-MAL-CLIENT-ID" : Deno.env.get("MAL_CLIENT_ID") ?? ""
         }
     });
-    const mal = await resp.json();
-    // console.log(mal.main_picture.large);
-    //console.log(mal);
-    if (mal && mal.main_picture && mal.main_picture.large) {
-        return mal.main_picture.large.replace(/\.[a-z]+$/, '.webp');
-    }
-    return null;
+    return await resp.json();
+}
+
+// needs to wait 1s between requests
+export async function getAnimeDetailsMalJikanMoeApi(mal_id: number) {
+    const resp = await fetch(`https://api.jikan.moe/v4/anime/${mal_id}/full`);
+    return await resp.json();
 }
 
 export async function fillAnime(pb: PocketBase, mal_id: number, slug: string) {
@@ -109,13 +102,30 @@ export async function saveAnime(pb: PocketBase, anime: any) {
         "season": anime.season,
         "title_it": anime.title_it,
         "mal_id": anime.mal_id,
-        "past_seasons_checked": true
+        "past_seasons_checked": true,
+        "nsfw": null,
+        "rating": null,
+        "video": null
     }
 
-    const malImage = await getAnimeImageMal(anime.mal_id);
-    if (malImage) {
-        animeData["imageurl"] = malImage;
-        // console.log(`updated imageurl: ${animeData.mau_id}-${animeData.slug}`);
+    const malApiDetails = await getAnimeDetailsMalApi(anime.mal_id, ["main_picture", "nsfw", "rating"]);
+    if (malApiDetails) {
+        if (malApiDetails.main_picture && malApiDetails.main_picture.large) {
+            animeData["imageurl"] = malApiDetails.main_picture.large.replace(/\.[a-z]+$/, '.webp');
+        }
+        if (malApiDetails.nsfw) {
+            animeData["nsfw"] = malApiDetails.nsfw;
+        }
+        if (malApiDetails.rating) {
+            animeData["rating"] = malApiDetails.rating;
+        }
+    }
+
+    const malJikanMoeApiDetails = await getAnimeDetailsMalJikanMoeApi(anime.mal_id);
+    await new Promise(resolve => setTimeout(resolve, 1000)); // wait 1s
+    if (malJikanMoeApiDetails) {
+        const video_id = malJikanMoeApiDetails.data?.trailer?.youtube_id ?? "-";
+        animeData["video"] = video_id;
     }
 
     let an;

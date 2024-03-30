@@ -7,6 +7,7 @@ import { updateLatest } from "./update_latest.ts";
 import { pastSeasons } from "./past_seasons.ts";
 import { load } from "https://deno.land/std/dotenv/mod.ts";
 import { getRandom } from "./get_random.ts";
+import { fillMissingDetails } from "./fill_missing_details.ts";
 
 const env = await load();
 if (env.ADMIN_EMAIL) {
@@ -51,6 +52,11 @@ router
   .get("/api/get-random", async (context) => {
     dbAuth(pb);
     await getRandom(pb);
+    context.response.body = "Done!";
+  })
+  .get("/api/fill-missing-details", async (context) => {
+    dbAuth(pb);
+    await fillMissingDetails(pb);
     context.response.body = "Done!";
   });
 
