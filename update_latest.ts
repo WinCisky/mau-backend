@@ -52,18 +52,17 @@ export async function updateLatest(pb: PocketBase) {
                   }
                 }
 
-                const malJikanMoeApiDetails = await getAnimeDetailsMalJikanMoeApi(anime.mal_id);
-                await new Promise(resolve => setTimeout(resolve, 1000)); // wait 1s
-                if (malJikanMoeApiDetails) {
-                  const video_id = malJikanMoeApiDetails.data?.trailer?.youtube_id ?? "-";
-                  anime["video"] = video_id;
-                }
-
                 let an;
                 try {
                   an = await pb.collection('mau_anime').getFirstListItem(`mau_id="${anime.mau_id}"`);
                   await pb.collection('mau_anime').update(an.id, anime);
                 } catch (_err){
+                  const malJikanMoeApiDetails = await getAnimeDetailsMalJikanMoeApi(anime.mal_id);
+                  await new Promise(resolve => setTimeout(resolve, 1000)); // wait 1s
+                  if (malJikanMoeApiDetails) {
+                    const video_id = malJikanMoeApiDetails.data?.trailer?.youtube_id ?? "-";
+                    anime["video"] = video_id;
+                  }
                   an = await pb.collection('mau_anime').create(anime);
                 }
 
