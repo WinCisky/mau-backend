@@ -1,4 +1,4 @@
-import PocketBase from "https://esm.sh/pocketbase@0.15.3";
+import PocketBase from "https://esm.sh/pocketbase@0.21.4";
 import { getAnimeDetailsMalApi } from "./helper_anime.ts";
 
 export async function fillMissingDetails(pb: PocketBase) {

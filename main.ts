@@ -1,6 +1,6 @@
-import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { Application, Router } from "https://deno.land/x/oak@v16.1.0/mod.ts";
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
-import PocketBase from "https://esm.sh/pocketbase@0.15.3";
+import PocketBase from "https://esm.sh/pocketbase@0.21.4";
 import { dbAuth } from "./helper.ts";
 import { getVideoUrl } from "./helper_mirror.ts";
 import { updateLatest } from "./update_latest.ts";
