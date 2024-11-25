@@ -1,4 +1,4 @@
-import type PocketBase from "https://esm.sh/pocketbase@0.15.3";
+import type PocketBase from "https://esm.sh/pocketbase@0.22.0";
 import { decodeHTMLString } from "./helper.ts";
 import { fillAnime } from "./helper_anime.ts";
 
