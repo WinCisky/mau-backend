@@ -6,8 +6,10 @@ export async function getVideoUrl(videoId: number | null, address: string | null
     }
     const videoProviderRequest = await fetch(`https://www.animeunity.to/embed-url/${videoId}`);
     const videoUrl = await videoProviderRequest.text();
+    console.log('videoUrl', videoUrl);
     const videoRequest = await fetch(videoUrl);
     const videoData = await videoRequest.text();
+    console.log('videoData', videoData);
     //regex to get metadata
     // const videoMetadata = videoData.match(/window\.videoMetadata\s*=\s*({[\s\S]*?});/);
     // if (videoMetadata) {
@@ -19,6 +21,7 @@ export async function getVideoUrl(videoId: number | null, address: string | null
     // }
     const regex = /window\.downloadUrl = '([^']+)'/;
     const result = regex.exec(videoData);
+    console.log('result', result);
     if (result) {
         return result[1];
     }
