@@ -30,6 +30,8 @@ export async function getVideoUrl(videoId: number | null, address: string | null
     const videoRequest = await fetch(videoUrl);
     const videoData = await videoRequest.text();
     console.log('videoData', videoData);
+    console.log('token 2h: ', generateToken(2, address, "Yc8U6r8KjAKAepEA"));
+    console.log('token 1h: ', generateToken(1, address, "Yc8U6r8KjAKAepEA"));
     //regex to get metadata
     const videoMetadata = videoData.match(/window\.videoMetadata\s*=\s*({[\s\S]*?});/);
     if (videoMetadata) {
@@ -37,8 +39,9 @@ export async function getVideoUrl(videoId: number | null, address: string | null
         const tokenDownload = generateToken(2, address, "Yc8U6r8KjAKAepEA");
         const downloadUrl = "https://au-d1-0" + videoMetadataJson.proxy_download + ".scws-content.net/download/" +
             videoMetadataJson.storage_download.number + "/" + videoMetadataJson.folder_id + "/" + videoMetadataJson.quality + "p.mp4" + "?token=" + tokenDownload + "&filename=" + videoMetadataJson.name.replace('&', '.');
-        // return downloadUrl;
+
         console.log('downloadUrl', downloadUrl);
+        return downloadUrl;
     }
     const regex = /window\.downloadUrl = '([^']+)'/;
     const result = regex.exec(videoData);
