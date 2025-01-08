@@ -45,8 +45,13 @@ export async function getVideoUrl(videoId: number | null, address: string | null
     const videoPlaylist = videoData.match(/window\.masterPlaylist\s*=\s*({[\s\S]*?}[\s\S]*?})/);
     if (videoPlaylist) {
         console.log('videoPlaylist', videoPlaylist[1]);
-        // const videoPlaylistJson = JSON.parse(videoPlaylist[1]);
-        // console.log('videoPlaylistJson', `${videoPlaylistJson.url}?token=${videoPlaylistJson.params.token}&expires=${videoPlaylistJson.params.expires}&h=1`);
+        let preprocessed = videoPlaylist[1]
+            .replace(/(\w+):\s/g, '"$1":')        // Quote object keys
+            .replace(/'/g, '"')                // Replace single quotes with double quotes
+            .replace(/,\s*([}\]])/g, '$1')
+            .replace(/\n/g, '');
+        const videoPlaylistJson = JSON.parse(preprocessed);
+        console.log('videoPlaylistJson', `${videoPlaylistJson.url}?token=${videoPlaylistJson.params.token}&expires=${videoPlaylistJson.params.expires}&h=1`);
     }
 
     const regex = /window\.downloadUrl = '([^']+)'/;
