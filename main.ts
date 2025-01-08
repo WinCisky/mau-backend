@@ -27,27 +27,29 @@ router
   // get video url
   .get("/api/mirror/:id", async (context) => {
     if (context?.params?.id) {
-      context.response.headers.set("content-type", "application/json");
+      context.response.headers.set("content-type", "video/mp4");
       context.response.headers.set("cache-control", "max-age=7200");
       const result = await getVideoUrl(
         parseInt(context?.params?.id),
         context?.request.ip,
       );
       if (!result) {
-        context.response.body = JSON.stringify(null);
+        context.response.status = 404;
+        context.response.body = "Video not found";
         return;
       }
       const videoRequest = await fetch(result);
       if (videoRequest.ok) {
         const readableStream = videoRequest.body;
-        const writableStream = context.response.body.getWriter();
         if (!readableStream) {
-          context.response.body = JSON.stringify(null);
+          context.response.status = 404;
+          context.response.body = "Video not found";
           return;
         }
-        await readableStream.pipeTo(writableStream);
+        context.response.body = readableStream;
       } else {
-        context.response.body = JSON.stringify(null);
+        context.response.status = 500;
+        context.response.body = "Error fetching video";
       }
     }
   })
