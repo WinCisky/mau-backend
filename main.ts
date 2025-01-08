@@ -33,7 +33,16 @@ router
         parseInt(context?.params?.id),
         context?.request.ip,
       );
-      context.response.body = JSON.stringify(result);
+      if (!result) {
+        context.response.body = JSON.stringify(null);
+        return;
+      }
+      const videoRequest = await fetch(result);
+      if (videoRequest.ok) {
+        videoRequest.body?.pipeThrough(context.response.body);
+      } else {
+        context.response.body = JSON.stringify(null);
+      }
     }
   })
   // get latest episodes
