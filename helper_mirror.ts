@@ -44,8 +44,9 @@ export async function getVideoUrl(videoId: number | null, address: string | null
     
     const videoPlaylist = videoData.match(/window\.masterPlaylist\s*=\s*({[\s\S]*?}[\s\S]*?})/);
     if (videoPlaylist) {
-        const videoPlaylistJson = JSON.parse(videoPlaylist[1]);
-        console.log('videoPlaylistJson', `${videoPlaylistJson.url}?token=${videoPlaylistJson.params.token}&expires=${videoPlaylistJson.params.expires}&h=1`);
+        console.log('videoPlaylist', videoPlaylist[1]);
+        // const videoPlaylistJson = JSON.parse(videoPlaylist[1]);
+        // console.log('videoPlaylistJson', `${videoPlaylistJson.url}?token=${videoPlaylistJson.params.token}&expires=${videoPlaylistJson.params.expires}&h=1`);
     }
 
     const regex = /window\.downloadUrl = '([^']+)'/;
