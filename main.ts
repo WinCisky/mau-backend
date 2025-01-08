@@ -39,7 +39,13 @@ router
       }
       const videoRequest = await fetch(result);
       if (videoRequest.ok) {
-        videoRequest.body?.pipeThrough(context.response.body);
+        const readableStream = videoRequest.body;
+        const writableStream = context.response.body.getWriter();
+        if (!readableStream) {
+          context.response.body = JSON.stringify(null);
+          return;
+        }
+        await readableStream.pipeTo(writableStream);
       } else {
         context.response.body = JSON.stringify(null);
       }
