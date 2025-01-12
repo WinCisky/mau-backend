@@ -2,7 +2,7 @@ import type PocketBase from "https://esm.sh/pocketbase@0.22.0";
 
 import { decodeHTMLString } from "./helper.ts";
 import { getAnimeDetailsMalApi, getAnimeDetailsMalJikanMoeApi } from "./helper_anime.ts";
-const MY_URL = "https://www.animeunity.tv";
+const MY_URL = "https://www.animeunity.to";
 
 export async function updateLatest(pb: PocketBase) {
     const textResponse = await fetch(MY_URL);
