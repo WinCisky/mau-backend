@@ -27,8 +27,13 @@ router
   // get video url
   .get("/api/mirror/:id", async (context) => {
     if (context?.params?.id) {
-      context.response.headers.set("content-type", "video/mp4");
-      context.response.headers.set("cache-control", "max-age=7200");
+      const range = context.request.headers.get("range");
+      if (!range) {
+        context.response.status = 416; // Range Not Satisfiable
+        context.response.body = "Range header is required";
+        return;
+      }
+
       const result = await getVideoUrl(
         parseInt(context?.params?.id),
         context?.request.ip,
@@ -38,7 +43,13 @@ router
         context.response.body = "Video not found";
         return;
       }
-      const videoRequest = await fetch(result);
+
+      const videoRequest = await fetch(result, {
+        headers: {
+          "Range": range,
+        },
+      });
+
       if (videoRequest.ok) {
         const readableStream = videoRequest.body;
         if (!readableStream) {
@@ -46,6 +57,16 @@ router
           context.response.body = "Video not found";
           return;
         }
+
+        const contentRange = videoRequest.headers.get("content-range");
+        const contentLength = videoRequest.headers.get("content-length");
+
+        context.response.status = 206; // Partial Content
+        context.response.headers.set("content-type", "video/mp4");
+        context.response.headers.set("content-range", contentRange || "");
+        context.response.headers.set("content-length", contentLength || "");
+        context.response.headers.set("accept-ranges", "bytes");
+
         context.response.body = readableStream;
       } else {
         context.response.status = 500;
