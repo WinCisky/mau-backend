@@ -18,7 +18,7 @@ export async function getAnimeDetailsMalJikanMoeApi(mal_id: number) {
 
 export async function fillAnime(pb: PocketBase, mal_id: number, slug: string) {
     // console.log(`fillAnime: ${mal_id}-${slug}`);
-    const animeUrl = `https://www.animeunity.to/anime/${mal_id}-${slug}`;
+    const animeUrl = `https://www.animeunity.so/anime/${mal_id}-${slug}`;
     const textResponse = await fetch(animeUrl);
     const textData = await textResponse.text();
 

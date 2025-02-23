@@ -2,7 +2,7 @@ import type PocketBase from "https://esm.sh/pocketbase@0.22.0";
 
 import { decodeHTMLString } from "./helper.ts";
 import { getAnimeDetailsMalApi, getAnimeDetailsMalJikanMoeApi } from "./helper_anime.ts";
-const MY_URL = "https://www.animeunity.to";
+const MY_URL = "https://www.animeunity.so";
 
 export async function updateLatest(pb: PocketBase) {
     const textResponse = await fetch(MY_URL, {
@@ -26,6 +26,7 @@ export async function updateLatest(pb: PocketBase) {
       "body": null,
       "method": "GET"
     });
+    // const textResponse = await fetch(MY_URL);
     const textData = await textResponse.text();
 
     const regex = /<layout-items\s+items-json="(.*?)"/g;

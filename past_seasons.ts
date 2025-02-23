@@ -31,7 +31,7 @@ export async function pastSeasons(pb: PocketBase) {
     const textResponse = await fetch(animeUrl);
     const textData = await textResponse.text();
     //  get related anime
-    const regex = /related-item(?:\s+[^"]*)?">[\s\S]*?<a href="https:\/\/www.animeunity.to\/anime\/(\d+)-([^"]+)">/g;
+    const regex = /related-item(?:\s+[^"]*)?">[\s\S]*?<a href="https:\/\/www.animeunity.so\/anime\/(\d+)-([^"]+)">/g;
     // all matches
     do {
         const match = regex.exec(textData);

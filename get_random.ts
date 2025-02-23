@@ -2,7 +2,7 @@ import type PocketBase from "https://esm.sh/pocketbase@0.22.0";
 import { decodeHTMLString } from "./helper.ts";
 import { fillAnime } from "./helper_anime.ts";
 
-const RANDOM_URL = "https://www.animeunity.to/randomanime";
+const RANDOM_URL = "https://www.animeunity.so/randomanime";
 
 export async function getRandom(pb: PocketBase) {
     // get website html
