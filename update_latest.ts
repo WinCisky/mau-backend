@@ -5,7 +5,27 @@ import { getAnimeDetailsMalApi, getAnimeDetailsMalJikanMoeApi } from "./helper_a
 const MY_URL = "https://www.animeunity.to";
 
 export async function updateLatest(pb: PocketBase) {
-    const textResponse = await fetch(MY_URL);
+    const textResponse = await fetch(MY_URL, {
+      "headers": {
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+        "accept-language": "it-IT,it;q=0.9,en-US;q=0.8,en;q=0.7",
+        "cache-control": "no-cache",
+        "pragma": "no-cache",
+        "priority": "u=0, i",
+        "sec-ch-ua": "\"Not(A:Brand\";v=\"99\", \"Google Chrome\";v=\"133\", \"Chromium\";v=\"133\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"Linux\"",
+        "sec-fetch-dest": "document",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "same-origin",
+        "sec-fetch-user": "?1",
+        "upgrade-insecure-requests": "1",
+        "Referer": "https://www.animeunity.so/",
+        "Referrer-Policy": "strict-origin-when-cross-origin"
+      },
+      "body": null,
+      "method": "GET"
+    });
     const textData = await textResponse.text();
 
     const regex = /<layout-items\s+items-json="(.*?)"/g;
