@@ -1,4 +1,4 @@
-import type PocketBase from "https://esm.sh/pocketbase@0.22.0";
+import type PocketBase from "https://esm.sh/pocketbase@0.26.0";
 
 interface HtmlEntities {
     [key: string]: string;

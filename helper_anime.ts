@@ -1,4 +1,4 @@
-import type PocketBase from "https://esm.sh/pocketbase@0.22.0";
+import type PocketBase from "https://esm.sh/pocketbase@0.26.0";
 import { decodeHTMLString } from "./helper.ts";
 
 export async function getAnimeDetailsMalApi(mal_id: number, fields: string[] = []) {

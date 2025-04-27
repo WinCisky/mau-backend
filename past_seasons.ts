@@ -1,4 +1,4 @@
-import type PocketBase from "https://esm.sh/pocketbase@0.22.0";
+import type PocketBase from "https://esm.sh/pocketbase@0.26.0";
 
 import { fillAnime } from "./helper_anime.ts";
 const MY_URL = "https://www.animeunity.tv";
