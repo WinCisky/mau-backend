@@ -43,7 +43,7 @@ router
     let videoUrl: string | undefined;
 
     const kv = await Deno.openKv();
-    const cachedUrl = await kv.get(`video:${videoId}`);
+    const cachedUrl = await kv.get(['video' , `${videoId}`]);
     if (cachedUrl.value) {
       console.log(`Cache hit for video ID: ${videoId}`);
       videoUrl = cachedUrl.value;
@@ -62,7 +62,7 @@ router
       videoUrl = result;
       // cache for 30 minutes
       const expireIn = 60 * 60 * 1000; // 60 minutes in milliseconds
-      await kv.set(`video:${videoId}`, videoUrl, { expireIn });
+      await kv.set(['video', `${videoId}`], videoUrl, { expireIn });
     }
 
     if (!videoUrl) {
