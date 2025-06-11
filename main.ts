@@ -43,8 +43,8 @@ router
     let videoUrl: string | undefined;
 
     const kv = await Deno.openKv();
-    const cachedUrl = await kv.get<string>(`video:${videoId}`);
-    if (cachedUrl) {
+    const cachedUrl = await kv.get(`video:${videoId}`);
+    if (cachedUrl.value) {
       console.log(`Cache hit for video ID: ${videoId}`);
       videoUrl = cachedUrl.value;
     } else {
