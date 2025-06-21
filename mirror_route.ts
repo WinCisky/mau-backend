@@ -1,4 +1,4 @@
-import type { Context } from "https://deno.land/x/oak@v16.1.0/mod.ts";
+import type { Context } from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import { getVideoUrl } from "./helper_mirror.ts";
 
 export async function handleMirrorRoute(context: Context) {

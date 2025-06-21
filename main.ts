@@ -1,4 +1,4 @@
-import { Application, Router } from "https://deno.land/x/oak@v16.1.0/mod.ts";
+import { Application, Router } from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 import PocketBase from "https://esm.sh/pocketbase@0.26.0";
 import { dbAuth } from "./helper.ts";
